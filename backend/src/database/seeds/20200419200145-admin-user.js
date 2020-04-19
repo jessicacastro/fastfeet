@@ -6,7 +6,6 @@ module.exports = {
       'users',
       [
         {
-          id: 1,
           name: 'Distribuidora FastFeet',
           email: 'admin@fastfeet.com',
           password_hash: bcrypt.hashSync('123456', 8),
