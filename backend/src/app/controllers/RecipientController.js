@@ -1,8 +1,13 @@
 import * as Yup from 'yup';
-import User from '../models/User';
 import Recipient from '../models/Recipient';
 
 class RecipientController {
+  async index(req, res) {
+    const recipients = await Recipient.findAll();
+
+    return res.json(recipients);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -17,14 +22,6 @@ class RecipientController {
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails.' });
-    }
-
-    const checkIsAdmin = await User.findOne({ where: { id: req.userId } });
-
-    if (!checkIsAdmin) {
-      return res
-        .status(401)
-        .json({ error: 'You can only create recipients with admin user.' });
     }
 
     const {
