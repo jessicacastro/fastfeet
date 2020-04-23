@@ -12,11 +12,10 @@ class CancellationMail {
   // Tarefa executada quando o processo for executado.
   async handle({ data }) {
     const { packageCreated } = data;
-    console.log(packageCreated);
 
     await Mail.sendMail({
       to: `${packageCreated.deliveryman.name} <${packageCreated.deliveryman.email}>`,
-      subject: 'Entrega Agendada',
+      subject: `[FastFeet] Cancelamento de Entrega - ${packageCreated.product}`,
       template: 'cancellation',
       context: {
         deliveryman: packageCreated.deliveryman.name,

@@ -2,6 +2,9 @@ import * as Yup from 'yup';
 import Deliveryman from '../models/Deliveryman';
 import File from '../models/File';
 
+import CreatedDeliverymanMail from '../jobs/CreatedDeliverymanMail';
+import Queue from '../../lib/Queue';
+
 class DeliverymanController {
   async index(req, res) {
     const deliverymans = await Deliveryman.findAll({
@@ -30,7 +33,18 @@ class DeliverymanController {
 
     const { name, email } = req.body;
 
+    const emailExists = await Deliveryman.findOne({ where: { email } });
+
+    if (emailExists) {
+      return res.status(401).json({ error: 'Email already exists.' });
+    }
+
     const deliveryman = await Deliveryman.create({
+      name,
+      email,
+    });
+
+    await Queue.add(CreatedDeliverymanMail.key, {
       name,
       email,
     });

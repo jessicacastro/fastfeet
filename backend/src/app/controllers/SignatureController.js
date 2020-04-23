@@ -1,4 +1,4 @@
-import Signature from '../models/File';
+import Signature from '../models/Signature';
 
 class SignatureController {
   async store(req, res) {
